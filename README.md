@@ -6,7 +6,7 @@ Burp Suite extension to track vulnerability assessment progress.
 
 Features
 --------
-* Capturing items (unique requests) from the Burp Suite tools (Proxy, Repeater, Target). Request unique key consists of target (host, port, protocol), path and method.
+* Capture items (unique requests) from the Burp Suite tools (Proxy, Repeater, Target). Request unique key is defined as follows: target (host, port, protocol), path and method.
 
 * Items have following editable properties:
   - comment
@@ -16,6 +16,8 @@ Features
 * Items can be filtered by:
   - status
   - tags (there are two filtering modes: **AND** - item has to have all filtering tags **OR** - item has to have at least one of the filtering tags)
+  
+* Exclude requests from capture based on the path extension or response status code
 
 * Selected items can be sent to the Burp Suite tools: Intruder, Repeater or Scanner
 
