@@ -11,6 +11,7 @@ from java.awt import BorderLayout
 from java.awt import Color
 from java.awt import Component
 from java.awt import Dimension
+from java.awt import Frame
 from java.awt.event import ActionListener
 from java.awt.event import FocusListener
 from java.awt.event import ItemListener
@@ -570,7 +571,7 @@ class BurpExtender(IBurpExtender, IExtensionStateListener):
         callbacks.addSuiteTab(ProgressTab())
         callbacks.registerExtensionStateListener(self)
         callbacks.registerHttpListener(HttpListener())
-        callbacks.setExtensionName('Progress v1.0')
+        callbacks.setExtensionName('Progress v1.1')
 
     def extensionUnloaded(self):
         EventBus().notify(EventBus.EVENT_EXTENSION_UNLOADED, None)
@@ -841,9 +842,9 @@ class DomainDictWithLock(DomainDict):
         super(DomainDictWithLock, self).__init__(value_repository)
         self._lock = Lock()
 
-    def set(self, key, value):
+    def set_value(self, key, value):
         with self._lock:
-            super(DomainDictWithLock, self).set(key, value)
+            super(DomainDictWithLock, self).set_value(key, value)
 
 
 class DuplicateItems(DomainDict):
@@ -1093,9 +1094,7 @@ class InfrastructureHelpers(object):
 
     @staticmethod
     def split(value):
-        if value == '':
-            return []
-        return value.split(',')
+        return value.replace(',', ' ').split()
 
 
 class InitCommand(object):
@@ -1758,6 +1757,8 @@ class Persistence(DomainDict):
             self._ui_services.display_error(str(e))
 
     def _persist_repositories(self, database_path):
+        if self._database.is_connected():
+            self._database.disconnect()
         self._database.connect(database_path)
         for repository in self._repositories:
             repository.init_persistence()
@@ -2077,7 +2078,7 @@ class SetInProgressStatusWhenSendingItemToToolPanel(CheckBoxPanel):
         return SetDomainDictValueCommand.TYPE_SELECTED_ITEMS
 
     def _get_label(self):
-        return '<html>Set <i>In progress</i> status when sending item to tool<html>'
+        return '<html>Set <i>In progress</i> status when sending item to tool</html>'
 
 
 class SetItemPropertyCommand(object):
@@ -2212,7 +2213,7 @@ class TagPanel(JPanel, DocumentListener):
         self._update()
 
     def display(self, values):
-        self.add(JLabel('<html><b>Tags:</b></html'))
+        self.add(JLabel('<html><b>Tags:</b></html>'))
         self._text_field = JTextField()
         self._text_field.setColumns(20)
         self._text_field.setEditable(True)
@@ -2232,7 +2233,7 @@ class UIHelpers(object):
     @staticmethod
     def ask_for_value(title, message, initial_value, is_value_array):
         value = JOptionPane.showInputDialog(
-            None,
+            UIHelpers._get_parent_frame(),
             message,
             title,
             JOptionPane.PLAIN_MESSAGE,
@@ -2247,13 +2248,13 @@ class UIHelpers(object):
     @staticmethod
     def choose_file():
         file_chooser = JFileChooser()
-        if file_chooser.showSaveDialog(None) == JFileChooser.APPROVE_OPTION:
+        if file_chooser.showSaveDialog(UIHelpers._get_parent_frame()) == JFileChooser.APPROVE_OPTION:
             return str(file_chooser.getSelectedFile())
 
     @staticmethod
     def confirm(question):
         chosen_option = JOptionPane.showConfirmDialog(
-            None,
+            UIHelpers._get_parent_frame(),
             question,
             'Confirm',
             JOptionPane.YES_NO_OPTION,
@@ -2264,11 +2265,17 @@ class UIHelpers(object):
     @staticmethod
     def display_error(message):
         JOptionPane.showMessageDialog(
-            None,
+            UIHelpers._get_parent_frame(),
             message,
             'Error',
             JOptionPane.ERROR_MESSAGE
         )
+
+    @staticmethod
+    def _get_parent_frame():
+        for frame in Frame.getFrames():
+            if 'burp suite' in frame.getTitle().lower():
+                return frame
 
 
 class UIServices(object):

@@ -1,3 +1,9 @@
+v1.1
+=========================================
+- Multiple inputs (tags, excluded extensions, excluded status codes) can be now separated by commas and spaces (leading and trailing spaces are ignored)
+- Burp Suite main frame is used as a parent of dialog boxes
+- Minor fixes
+
 v1.0
 =========================================
 - Initial release
