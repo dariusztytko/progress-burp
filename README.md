@@ -52,3 +52,7 @@ If you install extension manually, and you want to persist items and path patter
 Changes
 -------
 Please see the [CHANGELOG](CHANGELOG)
+
+BApp Store
+----------
+Extension is available in the BApp Store: [Progress Tracker](https://portswigger.net/bappstore/17544cadcec64dcf8ed68df8518592e4)
