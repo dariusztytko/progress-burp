@@ -571,7 +571,7 @@ class BurpExtender(IBurpExtender, IExtensionStateListener):
         callbacks.addSuiteTab(ProgressTab())
         callbacks.registerExtensionStateListener(self)
         callbacks.registerHttpListener(HttpListener())
-        callbacks.setExtensionName('Progress v1.1')
+        callbacks.setExtensionName('Progress Tracker v1.1')
 
     def extensionUnloaded(self):
         EventBus().notify(EventBus.EVENT_EXTENSION_UNLOADED, None)

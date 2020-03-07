@@ -1,8 +1,8 @@
-Progress
-========
-![Screenshot](screenshot.png)
-
+Progress Tracker
+================
 Burp Suite extension to track vulnerability assessment progress.
+
+![Screenshot](screenshot.png)
 
 Features
 --------
